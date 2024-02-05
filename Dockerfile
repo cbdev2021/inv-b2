@@ -1,15 +1,17 @@
-# Usa la imagen de OpenJDK 17 como base
-FROM openjdk:17-jre-slim
+# Fase de construcción
+FROM maven:3.8.4-openjdk-17 AS build
 
-
-# Establece el directorio de trabajo en /app
 WORKDIR /app
+COPY . .
 
-# Copia el archivo JAR construido por Maven a la imagen
-COPY target/Inv-0.0.1-SNAPSHOT.jar app.jar
+RUN mvn clean package
 
-# Expone el puerto 8080
+# Fase de ejecución
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+COPY --from=build /app/target/Inv-0.0.1-SNAPSHOT.jar app.jar
+
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación cuando se inicie el contenedor
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
