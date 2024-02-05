@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.inv.spring.data.mongodb.model.Product;
 import com.inv.spring.data.mongodb.repository.ProductRepository;
 
+@CrossOrigin(origins = "http://localhost:4000")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
