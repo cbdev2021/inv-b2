@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inv.spring.data.mongodb.model.Tutorial;
 import com.inv.spring.data.mongodb.repository.TutorialRepository;
 
-@CrossOrigin(origins = "http://localhost:4000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class TutorialController {
