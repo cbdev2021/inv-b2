@@ -77,12 +77,13 @@ public class ProductInvoiceController {
                 existingProductInvoice.setPrice(updatedProductInvoice.getPrice());
                 existingProductInvoice.setAmount(updatedProductInvoice.getAmount());
                 existingProductInvoice.setUtility(updatedProductInvoice.getUtility());
-                //
-                existingProductInvoice.setIdUsuario(updatedProductInvoice.getIdUsuario()
-                existingProductInvoice.setInvoiceID(updatedProductInvoice.getInvoiceID()
-                existingProductInvoice.setProductId(updatedProductInvoice.getProductId()
-                existingProductInvoice.setName(updatedProductInvoice.getName()
-                existingProductInvoice.setDescription(updatedProductInvoice.getDescription()
+                                
+                existingProductInvoice.setIdUsuario(updatedProductInvoice.getIdUsuario());
+                existingProductInvoice.setInvoiceID(updatedProductInvoice.getInvoiceID());
+                existingProductInvoice.setProductId(updatedProductInvoice.getProductId());
+                existingProductInvoice.setName(updatedProductInvoice.getName());
+                existingProductInvoice.setDescription(updatedProductInvoice.getDescription());  
+
 
                 ProductInvoice savedProductInvoice = productInvoiceRepository.save(existingProductInvoice);
 
