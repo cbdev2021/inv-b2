@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface InvoiceRepository extends CrudRepository<Invoice, String> {
     // Add custom query methods if needed
+    Iterable<Invoice> findByIdUsuario(String idUsuario);
 }

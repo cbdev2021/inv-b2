@@ -71,18 +71,18 @@ public class ProductInvoiceController {
             if (productInvoiceData.isPresent()) {
                 ProductInvoice existingProductInvoice = productInvoiceData.get();
 
-                // SOLO HAY 5 AGREGAR LOS 
+                // SOLO HAY 5 AGREGAR LOS
                 existingProductInvoice.setInvoiceType(updatedProductInvoice.getInvoiceType());
                 existingProductInvoice.setDateIssue(updatedProductInvoice.getDateIssue());
                 existingProductInvoice.setPrice(updatedProductInvoice.getPrice());
                 existingProductInvoice.setAmount(updatedProductInvoice.getAmount());
                 existingProductInvoice.setUtility(updatedProductInvoice.getUtility());
                 //
-                existingProductInvoice.setIdUsuario(updatedProductInvoice.getIdUsuario() );
-                existingProductInvoice.setInvoiceID(updatedProductInvoice.getInvoiceID() );
-                existingProductInvoice.setProductId(updatedProductInvoice.getProductId() );
-                existingProductInvoice.setName(updatedProductInvoice.getName() );
-                existingProductInvoice.setDescription(updatedProductInvoice.getDescription() );
+                existingProductInvoice.setIdUsuario(updatedProductInvoice.getIdUsuario()
+                existingProductInvoice.setInvoiceID(updatedProductInvoice.getInvoiceID()
+                existingProductInvoice.setProductId(updatedProductInvoice.getProductId()
+                existingProductInvoice.setName(updatedProductInvoice.getName()
+                existingProductInvoice.setDescription(updatedProductInvoice.getDescription()
 
                 ProductInvoice savedProductInvoice = productInvoiceRepository.save(existingProductInvoice);
 
@@ -128,4 +128,17 @@ public class ProductInvoiceController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/get-product-invoices/{idUsuario}")
+    public ResponseEntity<Iterable<ProductInvoice>> getProductInvoicesByUserId(
+            
+            @PathVariable("idUsuario") String idUsuario) {
+        try {
+            Iterable<ProductInvoice> productInvoices = productInvoiceRepository.findByIdUsuario(idUsuario);
+            return new ResponseEntity<>(productInvoices, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

@@ -91,4 +91,15 @@ public class InvoiceController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/get-invoices/{idUsuario}")
+    public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario) {
+        try {
+            Iterable<Invoice> invoices = invoiceRepository.findByIdUsuario(idUsuario);
+            return new ResponseEntity<>(invoices, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
