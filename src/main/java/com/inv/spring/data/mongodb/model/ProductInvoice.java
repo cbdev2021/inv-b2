@@ -129,5 +129,5 @@ public class ProductInvoice {
         this.utility = utility;
     }
 
-    // Otros métodos, como toString, hashCode, equals, etc.
+ 
 }
