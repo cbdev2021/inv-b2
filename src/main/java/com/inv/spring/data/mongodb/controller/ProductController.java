@@ -11,25 +11,82 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.inv.spring.data.mongodb.model.Product;
+import com.inv.spring.data.mongodb.model.Sequence;
 import com.inv.spring.data.mongodb.repository.ProductRepository;
+import com.inv.spring.data.mongodb.repository.SequenceRepository;
 
-@CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.OPTIONS })
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final SequenceRepository sequenceRepository;
+    private final ProductRepository productRepository;
+
+    public ProductController(SequenceRepository sequenceRepository, ProductRepository productRepository) {
+        this.sequenceRepository = sequenceRepository;
+        this.productRepository = productRepository;
+    }
+
+    // @PostMapping("/add-product")
+    // public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+    // try {
+    // // Encuentra y actualiza el documento de la secuencia, incrementando el valor
+    // en 1
+    // Sequence sequence = sequenceRepository.findById("sequenceProductId")
+    // .orElseThrow(() -> new RuntimeException("No se pudo encontrar la
+    // secuencia"));
+    // int sequenceValue = sequence.getSequenceValue() + 1;
+    // sequence.setSequenceValue(sequenceValue);
+    // sequenceRepository.save(sequence);
+
+    // // Establece el productId del producto con el valor actualizado de la
+    // secuencia
+    // product.setProductId(sequenceValue);
+
+    // // Guarda el nuevo producto
+    // Product newProduct = productRepository.save(product);
+
+    // return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+    // } catch (Exception e) {
+    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    // }
+    // }
 
     @PostMapping("/add-product")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
         try {
+            // Encuentra y actualiza el documento de la secuencia, incrementando el valor en
+            // 1
+            Sequence sequence = sequenceRepository.findById("sequenceProductId")
+                    .orElseThrow(() -> new RuntimeException("No se pudo encontrar la secuencia"));
+            int sequenceValue = sequence.getSequenceValue() + 1;
+            sequence.setSequenceValue(sequenceValue);
+            sequenceRepository.save(sequence);
+
+            // Establece el productId del producto con el valor actualizado de la secuencia
+            product.setProductId(sequenceValue);
+
+            // Guarda el nuevo producto
             Product newProduct = productRepository.save(product);
-            return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    // @PostMapping("/add-product")
+    // public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+    // try {
+    // Product newProduct = productRepository.save(product);
+    // return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
+    // } catch (Exception e) {
+    // return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
 
     // @PutMapping("/update-product/{id}")
     // public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id,

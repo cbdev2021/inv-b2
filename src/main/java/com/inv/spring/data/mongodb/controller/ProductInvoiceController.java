@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import com.inv.spring.data.mongodb.model.ProductInvoice;
 import com.inv.spring.data.mongodb.repository.ProductInvoiceRepository;
 
-@CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RestController
 @RequestMapping("/api/product-invoices")
 public class ProductInvoiceController {

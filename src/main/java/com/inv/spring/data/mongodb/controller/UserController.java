@@ -22,7 +22,8 @@ import java.util.Optional;
 import java.security.MessageDigest;
 // import java.security.NoSuchAlgorithmException;
 
-@CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
