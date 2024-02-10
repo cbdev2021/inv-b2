@@ -15,7 +15,8 @@ import com.inv.spring.data.mongodb.repository.ProductInvoiceRepository;
 // @CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RestController
-@RequestMapping("/api/product-invoices")
+// @RequestMapping("/api/product-invoices")
+@RequestMapping("/api/products-invoices")
 public class ProductInvoiceController {
 
     @Autowired
@@ -131,7 +132,8 @@ public class ProductInvoiceController {
         }
     }
 
-    @GetMapping("/get-product-invoices/{idUsuario}")
+    // @GetMapping("/get-products-invoices/{idUsuario}")
+    @GetMapping("/get-products-invoice/{idUsuario}")
     public ResponseEntity<Iterable<ProductInvoice>> getProductInvoicesByUserId(
             
             @PathVariable("idUsuario") String idUsuario) {

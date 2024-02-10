@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.inv.spring.data.mongodb.model.Invoice;
+import com.inv.spring.data.mongodb.model.Sequence;
 import com.inv.spring.data.mongodb.repository.InvoiceRepository;
+import com.inv.spring.data.mongodb.repository.SequenceRepository;
 
 // @CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
@@ -20,6 +22,8 @@ public class InvoiceController {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+    @Autowired
+    private SequenceRepository sequenceRepository;
 
     @PostMapping("/add-invoice")
     public ResponseEntity<Invoice> addInvoice(@RequestBody Invoice invoice) {
@@ -100,6 +104,36 @@ public class InvoiceController {
             return new ResponseEntity<>(invoices, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/generate-id/{invoiceType}")
+    public ResponseEntity<Map<String, Integer>> generateId(@PathVariable("invoiceType") String invoiceType) {
+        try {
+            String sequenceId;
+            if (invoiceType.equals("Purchase")) {
+                sequenceId = "sequencePurchaseId";
+            } else if (invoiceType.equals("Sales")) {
+                sequenceId = "sequenceSaleId";
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            Optional<Sequence> sequenceData = sequenceRepository.findById(sequenceId);
+
+            if (sequenceData.isPresent()) {
+                Sequence sequence = sequenceData.get();
+                sequence.setSequenceValue(sequence.getSequenceValue() + 1);
+                sequenceRepository.save(sequence);
+
+                Map<String, Integer> response = new HashMap<>();
+                response.put("sequence_value", sequence.getSequenceValue());
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
