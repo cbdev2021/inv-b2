@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import com.inv.spring.data.mongodb.model.ProductInvoice;
 import com.inv.spring.data.mongodb.repository.ProductInvoiceRepository;
+import org.springframework.dao.DataIntegrityViolationException; // Importa esta excepción
 
 // @CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://localhost:3000", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.OPTIONS })
 @RestController
 // @RequestMapping("/api/product-invoices")
 @RequestMapping("/api/products-invoices")
@@ -22,13 +24,36 @@ public class ProductInvoiceController {
     @Autowired
     private ProductInvoiceRepository productInvoiceRepository;
 
+    // @PostMapping("/add-product-invoice")
+
+    // // public ResponseEntity<ProductInvoice> addProductInvoice(@RequestBody
+    // // ProductInvoice productInvoice) {
+
+    // public ResponseEntity<ProductInvoice> addProductInvoice(@RequestBody
+    // ProductInvoice productInvoice,
+    // @RequestHeader("Authorization") String token) {
+
+    // try {
+    // ProductInvoice newProductInvoice =
+    // productInvoiceRepository.save(productInvoice);
+    // return new ResponseEntity<>(newProductInvoice, HttpStatus.CREATED);
+    // } catch (Exception e) {
+    // return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
+
+    // Tu código de controlador...
     @PostMapping("/add-product-invoice")
-    public ResponseEntity<ProductInvoice> addProductInvoice(@RequestBody ProductInvoice productInvoice) {
+    public ResponseEntity<?> addProductInvoice(@RequestBody ProductInvoice productInvoice,
+            @RequestHeader("Authorization") String token) {
+
         try {
             ProductInvoice newProductInvoice = productInvoiceRepository.save(productInvoice);
             return new ResponseEntity<>(newProductInvoice, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("Ya existe un producto con el mismo ID de factura.");
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
         }
     }
 
@@ -79,13 +104,12 @@ public class ProductInvoiceController {
                 existingProductInvoice.setPrice(updatedProductInvoice.getPrice());
                 existingProductInvoice.setAmount(updatedProductInvoice.getAmount());
                 existingProductInvoice.setUtility(updatedProductInvoice.getUtility());
-                                
+
                 existingProductInvoice.setIdUsuario(updatedProductInvoice.getIdUsuario());
                 existingProductInvoice.setInvoiceID(updatedProductInvoice.getInvoiceID());
                 existingProductInvoice.setProductId(updatedProductInvoice.getProductId());
                 existingProductInvoice.setName(updatedProductInvoice.getName());
-                existingProductInvoice.setDescription(updatedProductInvoice.getDescription());  
-
+                existingProductInvoice.setDescription(updatedProductInvoice.getDescription());
 
                 ProductInvoice savedProductInvoice = productInvoiceRepository.save(existingProductInvoice);
 
@@ -99,7 +123,8 @@ public class ProductInvoiceController {
     }
 
     @DeleteMapping("/delete-product-invoice/{id}")
-    public ResponseEntity<Map<String, String>> deleteProductInvoice(@PathVariable("id") String id) {
+    public ResponseEntity<Map<String, String>> deleteProductInvoice(@PathVariable("id") String id,
+            @RequestHeader("Authorization") String token) {
         Map<String, String> response = new HashMap<>();
         try {
             Optional<ProductInvoice> existingProductInvoice = productInvoiceRepository.findById(id);
@@ -119,7 +144,8 @@ public class ProductInvoiceController {
     }
 
     @GetMapping("/get-product-invoice/{id}")
-    public ResponseEntity<ProductInvoice> getProductInvoice(@PathVariable("id") String id) {
+    public ResponseEntity<ProductInvoice> getProductInvoice(@PathVariable("id") String id,
+            @RequestHeader("Authorization") String token) {
         try {
             if (productInvoiceRepository.existsById(id)) {
                 ProductInvoice productInvoice = productInvoiceRepository.findById(id).get();
@@ -135,8 +161,8 @@ public class ProductInvoiceController {
     // @GetMapping("/get-products-invoices/{idUsuario}")
     @GetMapping("/get-products-invoice/{idUsuario}")
     public ResponseEntity<Iterable<ProductInvoice>> getProductInvoicesByUserId(
-            
-            @PathVariable("idUsuario") String idUsuario) {
+            @PathVariable("idUsuario") String idUsuario,
+            @RequestHeader("Authorization") String token) {
         try {
             Iterable<ProductInvoice> productInvoices = productInvoiceRepository.findByIdUsuario(idUsuario);
             return new ResponseEntity<>(productInvoices, HttpStatus.OK);

@@ -1,32 +1,82 @@
 package com.inv.spring.data.mongodb.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@Document(collection = "product_invoices")
+@Document(collection = "productinvoices")
 public class ProductInvoice {
     @Id
     private String id;
 
+    @JsonProperty("idUsuario")
     private String idUsuario;
+
+    @JsonProperty("invoiceType")
     private String invoiceType;
+
+    @JsonProperty("invoiceID")
     private int invoiceID;
+
+    @JsonProperty("productId")
     private int productId;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("description")
     private String description;
+
+    @JsonProperty("price")
     private double price;
+
+    @JsonProperty("amount")
     private int amount;
+
+    @JsonProperty("dateIssue")
+    // @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy", timezone = "UTC")
     private Date dateIssue;
+
+    @JsonProperty("utility")
     private double utility;
+
+
+    // @Id // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // private String id;
+    // @NonNull
+    // private String idUsuario;
+    // @NonNull
+    // private String invoiceType;
+    // @NonNull
+    // private int invoiceID;
+    // @NonNull
+    // private int productId;
+    // @NonNull
+    // private String name;
+    // @NonNull
+    // private String description;
+    // @NonNull
+    // private double price;
+    // @NonNull
+    // private int amount;
+    // @NonNull
+    // private Date dateIssue;
+    // @NonNull
+    // private double utility;
 
     // Constructores
 
     public ProductInvoice() {
     }
 
-    public ProductInvoice(String idUsuario, String invoiceType, int invoiceID, int productId, String name, String description, double price, int amount, Date dateIssue, double utility) {
+    public ProductInvoice(String idUsuario, String invoiceType, int invoiceID, int productId, String name,
+            String description, double price, int amount, Date dateIssue, double utility) {
         this.idUsuario = idUsuario;
         this.invoiceType = invoiceType;
         this.invoiceID = invoiceID;
@@ -129,5 +179,4 @@ public class ProductInvoice {
         this.utility = utility;
     }
 
- 
 }

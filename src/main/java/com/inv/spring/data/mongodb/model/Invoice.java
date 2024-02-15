@@ -3,6 +3,8 @@ package com.inv.spring.data.mongodb.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 @Document(collection = "invoices")
@@ -13,7 +15,10 @@ public class Invoice {
     private int invoiceID;
     private String invoiceType;
     private String idUsuario;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy", timezone = "UTC")
     private Date dateIssue;
+    
     private double subTotal;
     private double taxes;
     private String customer;

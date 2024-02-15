@@ -157,7 +157,8 @@ public class ProductController {
     // }
 
     @DeleteMapping("/delete-product/{id}")
-    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable("id") String id) {
+    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable("id") String id,
+    @RequestHeader("Authorization") String token) {
         Map<String, String> response = new HashMap<>();
         try {
             Optional<Product> existingProduct = productRepository.findById(id);
@@ -177,7 +178,8 @@ public class ProductController {
     }
 
     @GetMapping("/get-product/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") String id) {
+    public ResponseEntity<Product> getProduct(@PathVariable("id") String id,
+    @RequestHeader("Authorization") String token) {
         try {
             if (productRepository.existsById(id)) {
                 Product product = productRepository.findById(id).get();
@@ -191,7 +193,8 @@ public class ProductController {
     }
 
     @GetMapping("/get-products/{idUsuario}")
-    public ResponseEntity<Iterable<Product>> getProductsByUserId(@PathVariable("idUsuario") String idUsuario) {
+    public ResponseEntity<Iterable<Product>> getProductsByUserId(@PathVariable("idUsuario") String idUsuario,
+    @RequestHeader("Authorization") String token) {
         try {
             Iterable<Product> products = productRepository.findByIdUsuario(idUsuario);
             return new ResponseEntity<>(products, HttpStatus.OK);
@@ -202,7 +205,8 @@ public class ProductController {
 
     @PutMapping("/update-product-amount/{productId}")
     public ResponseEntity<Product> updateProductAmount(@PathVariable("productId") String productId,
-            @RequestBody Product product) {
+            @RequestBody Product product,
+            @RequestHeader("Authorization") String token) {
         try {
             if (productRepository.existsById(productId)) {
                 Product existingProduct = productRepository.findById(productId).get();

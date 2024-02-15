@@ -26,7 +26,9 @@ public class InvoiceController {
     private SequenceRepository sequenceRepository;
 
     @PostMapping("/add-invoice")
-    public ResponseEntity<Invoice> addInvoice(@RequestBody Invoice invoice) {
+    // public ResponseEntity<Invoice> addInvoice(@RequestBody Invoice invoice) {
+    public ResponseEntity<Invoice> addInvoice(@RequestBody Invoice invoice,
+    @RequestHeader("Authorization") String token) {
         try {
             Invoice newInvoice = invoiceRepository.save(invoice);
             return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
@@ -36,7 +38,8 @@ public class InvoiceController {
     }
 
     @PutMapping("/update-invoice/{id}")
-    public ResponseEntity<Invoice> updateInvoice(@PathVariable("id") String id, @RequestBody Invoice updatedInvoice) {
+    public ResponseEntity<Invoice> updateInvoice(@PathVariable("id") String id, @RequestBody Invoice updatedInvoice,
+    @RequestHeader("Authorization") String token) {
         try {
             Optional<Invoice> invoiceData = invoiceRepository.findById(id);
 
@@ -64,7 +67,8 @@ public class InvoiceController {
     }
 
     @DeleteMapping("/delete-invoice/{id}")
-    public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") String id) {
+    public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") String id,
+    @RequestHeader("Authorization") String token) {
         Map<String, String> response = new HashMap<>();
         try {
             Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
@@ -84,7 +88,8 @@ public class InvoiceController {
     }
 
     @GetMapping("/get-invoice/{id}")
-    public ResponseEntity<Invoice> getInvoice(@PathVariable("id") String id) {
+    public ResponseEntity<Invoice> getInvoice(@PathVariable("id") String id,
+    @RequestHeader("Authorization") String token) {
         try {
             if (invoiceRepository.existsById(id)) {
                 Invoice invoice = invoiceRepository.findById(id).get();
@@ -98,7 +103,8 @@ public class InvoiceController {
     }
 
     @GetMapping("/get-invoices/{idUsuario}")
-    public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario) {
+    public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario,
+    @RequestHeader("Authorization") String token) {
         try {
             Iterable<Invoice> invoices = invoiceRepository.findByIdUsuario(idUsuario);
             return new ResponseEntity<>(invoices, HttpStatus.OK);
