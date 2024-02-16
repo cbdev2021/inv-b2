@@ -15,7 +15,8 @@ import com.inv.spring.data.mongodb.repository.InvoiceRepository;
 import com.inv.spring.data.mongodb.repository.SequenceRepository;
 
 // @CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://localhost:3000", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.OPTIONS })
 @RestController
 @RequestMapping("/api/invoices")
 public class InvoiceController {
@@ -28,7 +29,7 @@ public class InvoiceController {
     @PostMapping("/add-invoice")
     // public ResponseEntity<Invoice> addInvoice(@RequestBody Invoice invoice) {
     public ResponseEntity<Invoice> addInvoice(@RequestBody Invoice invoice,
-    @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String token) {
         try {
             Invoice newInvoice = invoiceRepository.save(invoice);
             return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
@@ -39,7 +40,7 @@ public class InvoiceController {
 
     @PutMapping("/update-invoice/{id}")
     public ResponseEntity<Invoice> updateInvoice(@PathVariable("id") String id, @RequestBody Invoice updatedInvoice,
-    @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String token) {
         try {
             Optional<Invoice> invoiceData = invoiceRepository.findById(id);
 
@@ -66,19 +67,43 @@ public class InvoiceController {
         }
     }
 
+    // @DeleteMapping("/delete-invoice/{id}")
+    // public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id")
+    // String id,
+    // @RequestHeader("Authorization") String token) {
+
+    // @DeleteMapping("/delete-invoice/{id}")
+    // public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") String id) {
+    //     Map<String, String> response = new HashMap<>();
+    //     try {
+    //         Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
+
+    //         if (existingInvoice.isPresent()) {
+    //             invoiceRepository.deleteById(id);
+    //             response.put("message", "Invoice eliminado con éxito");
+    //             return new ResponseEntity<>(response, HttpStatus.OK);
+    //         } else {
+    //             response.put("message", "No se encontró la factura con ID: " + id);
+    //             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    //         }
+    //     } catch (Exception e) {
+    //         response.put("message", "Error al eliminar la factura");
+    //         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+
     @DeleteMapping("/delete-invoice/{id}")
-    public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") String id,
-    @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") int invoiceID) {
         Map<String, String> response = new HashMap<>();
         try {
-            Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
+            Optional<Invoice> existingInvoice = invoiceRepository.findByInvoiceID(invoiceID);
 
             if (existingInvoice.isPresent()) {
-                invoiceRepository.deleteById(id);
+                invoiceRepository.deleteByInvoiceID(invoiceID);
                 response.put("message", "Invoice eliminado con éxito");
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
-                response.put("message", "No se encontró la factura con ID: " + id);
+                response.put("message", "No se encontró la factura con ID: " + invoiceID);
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
@@ -87,9 +112,32 @@ public class InvoiceController {
         }
     }
 
+    // @DeleteMapping("/delete-invoice/{invoiceId}")
+    // public ResponseEntity<Map<String, String>>
+    // deleteInvoiceByInvoiceId(@PathVariable("invoiceId") String invoiceID) {
+    // Map<String, String> response = new HashMap<>();
+    // try {
+    // Optional<Invoice> existingInvoice =
+    // invoiceRepository.findByInvoiceId(invoiceID);
+
+    // if (existingInvoice.isPresent()) {
+    // invoiceRepository.deleteByInvoiceId(invoiceID);
+    // response.put("message", "Invoice eliminado con éxito");
+    // return new ResponseEntity<>(response, HttpStatus.OK);
+    // } else {
+    // response.put("message", "No se encontró la factura con invoiceId: " +
+    // invoiceID);
+    // return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    // }
+    // } catch (Exception e) {
+    // response.put("message", "Error al eliminar la factura");
+    // return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
+
     @GetMapping("/get-invoice/{id}")
     public ResponseEntity<Invoice> getInvoice(@PathVariable("id") String id,
-    @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String token) {
         try {
             if (invoiceRepository.existsById(id)) {
                 Invoice invoice = invoiceRepository.findById(id).get();
@@ -103,12 +151,13 @@ public class InvoiceController {
     }
 
     @GetMapping("/get-invoices/{idUsuario}")
-    // public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario,
+    // public ResponseEntity<Iterable<Invoice>>
+    // getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario,
     // @RequestHeader("Authorization") String token) {
 
-        //el token era requerido por eso no hacía bien la petición
-        public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario) {
-    
+    // el token era requerido por eso no hacía bien la petición
+    public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario) {
+
         try {
             Iterable<Invoice> invoices = invoiceRepository.findByIdUsuario(idUsuario);
             return new ResponseEntity<>(invoices, HttpStatus.OK);
