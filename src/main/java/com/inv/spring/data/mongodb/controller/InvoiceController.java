@@ -103,8 +103,12 @@ public class InvoiceController {
     }
 
     @GetMapping("/get-invoices/{idUsuario}")
-    public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario,
-    @RequestHeader("Authorization") String token) {
+    // public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario,
+    // @RequestHeader("Authorization") String token) {
+
+        //el token era requerido por eso no hacía bien la petición
+        public ResponseEntity<Iterable<Invoice>> getInvoicesByUserId(@PathVariable("idUsuario") String idUsuario) {
+    
         try {
             Iterable<Invoice> invoices = invoiceRepository.findByIdUsuario(idUsuario);
             return new ResponseEntity<>(invoices, HttpStatus.OK);
