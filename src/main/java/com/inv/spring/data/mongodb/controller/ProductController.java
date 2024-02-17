@@ -156,30 +156,57 @@ public class ProductController {
     // }
     // }
 
-    @DeleteMapping("/delete-product/{id}")
-    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable("id") String id,
-    @RequestHeader("Authorization") String token) {
-        Map<String, String> response = new HashMap<>();
-        try {
-            Optional<Product> existingProduct = productRepository.findById(id);
+    // @DeleteMapping("/delete-product/{id}")
+    // public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable("id")
+    // String id,
+    // @RequestHeader("Authorization") String token) {
 
-            if (existingProduct.isPresent()) {
-                productRepository.deleteById(id);
-                response.put("message", "Product eliminado con éxito");
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                response.put("message", "No se encontró el producto con ID: " + id);
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            response.put("message", "Error al eliminar el producto");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("/delete-product/{id}")
+    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable("id")
+    String id) {
+
+    Map<String, String> response = new HashMap<>();
+    try {
+    Optional<Product> existingProduct = productRepository.findById(id);
+
+    if (existingProduct.isPresent()) {
+    productRepository.deleteById(id);
+    response.put("message", "Product eliminado con éxito");
+    return new ResponseEntity<>(response, HttpStatus.OK);
+    } else {
+    response.put("message", "No se encontró el producto con ID: " + id);
+    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+    } catch (Exception e) {
+    response.put("message", "Error al eliminar el producto");
+    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+
+    // @DeleteMapping("/delete-product")
+    // public ResponseEntity<Map<String, String>> deleteProductByProductId(@RequestParam("productId") String productId) {
+
+    //     Map<String, String> response = new HashMap<>();
+    //     try {
+    //         Optional<Product> existingProduct = productRepository.findByProductId(productId);
+
+    //         if (existingProduct.isPresent()) {
+    //             productRepository.deleteByProductId(productId);
+    //             response.put("message", "Producto eliminado con éxito");
+    //             return new ResponseEntity<>(response, HttpStatus.OK);
+    //         } else {
+    //             response.put("message", "No se encontró el producto con productId: " + productId);
+    //             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    //         }
+    //     } catch (Exception e) {
+    //         response.put("message", "Error al eliminar el producto");
+    //         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
     @GetMapping("/get-product/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable("id") String id,
-    @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String token) {
         try {
             if (productRepository.existsById(id)) {
                 Product product = productRepository.findById(id).get();
@@ -194,7 +221,7 @@ public class ProductController {
 
     @GetMapping("/get-products/{idUsuario}")
     public ResponseEntity<Iterable<Product>> getProductsByUserId(@PathVariable("idUsuario") String idUsuario,
-    @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String token) {
         try {
             Iterable<Product> products = productRepository.findByIdUsuario(idUsuario);
             return new ResponseEntity<>(products, HttpStatus.OK);

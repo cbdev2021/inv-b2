@@ -10,4 +10,7 @@ public interface ProductRepository extends CrudRepository<Product, String> {
     Iterable<Product> findByIdUsuario(String idUsuario);
     Optional<Product> findByIdAndIdUsuario(String id, String idUsuario);
 
+    Optional<Product> findById(String id);
+    void deleteByProductId(String id);
+
 }
