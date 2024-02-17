@@ -11,8 +11,8 @@ public interface InvoiceRepository extends CrudRepository<Invoice, String> {
     Iterable<Invoice> findByIdUsuario(String idUsuario);
     void deleteById(String id);
     
-    Optional<Invoice> findByInvoiceID(int invoiceID);
-    void deleteByInvoiceID(int invoiceID);
+    Optional<Invoice> findByInvoiceID(String invoiceID);
+    void deleteByInvoiceID(String invoiceID);
     
 
 }

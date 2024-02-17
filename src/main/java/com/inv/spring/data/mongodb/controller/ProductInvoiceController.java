@@ -122,19 +122,39 @@ public class ProductInvoiceController {
         }
     }
 
-    @DeleteMapping("/delete-product-invoice/{id}")
-    public ResponseEntity<Map<String, String>> deleteProductInvoice(@PathVariable("id") String id,
-            @RequestHeader("Authorization") String token) {
+    // @DeleteMapping("/delete-product-invoice/{id}")
+    // public ResponseEntity<Map<String, String>> deleteProductInvoice(@PathVariable("id") String id,
+    //         @RequestHeader("Authorization") String token) {
+    //     Map<String, String> response = new HashMap<>();
+    //     try {
+    //         Optional<ProductInvoice> existingProductInvoice = productInvoiceRepository.findById(id);
+
+    //         if (existingProductInvoice.isPresent()) {
+    //             productInvoiceRepository.deleteById(id);
+    //             response.put("message", "ProductInvoice eliminado con éxito");
+    //             return new ResponseEntity<>(response, HttpStatus.OK);
+    //         } else {
+    //             response.put("message", "No se encontró el ProductInvoice con ID: " + id);
+    //             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    //         }
+    //     } catch (Exception e) {
+    //         response.put("message", "Error al eliminar el ProductInvoice");
+    //         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+
+    @DeleteMapping("/delete-products-invoice-id/{invoiceID}")
+    public ResponseEntity<Map<String, String>> deleteProductInvoice(@PathVariable("invoiceID") String invoiceID) {
         Map<String, String> response = new HashMap<>();
         try {
-            Optional<ProductInvoice> existingProductInvoice = productInvoiceRepository.findById(id);
+            Optional<ProductInvoice> existingProductInvoice = productInvoiceRepository.findByInvoiceID(invoiceID);
 
             if (existingProductInvoice.isPresent()) {
-                productInvoiceRepository.deleteById(id);
+                productInvoiceRepository.deleteByInvoiceID(invoiceID);
                 response.put("message", "ProductInvoice eliminado con éxito");
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
-                response.put("message", "No se encontró el ProductInvoice con ID: " + id);
+                response.put("message", "No se encontró el ProductInvoice con ID: " + invoiceID);
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {

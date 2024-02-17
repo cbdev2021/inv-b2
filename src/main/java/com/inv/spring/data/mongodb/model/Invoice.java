@@ -12,7 +12,7 @@ public class Invoice {
     @Id
     private String id;
 
-    private int invoiceID;
+    private String invoiceID;
     private String invoiceType;
     private String idUsuario;
 
@@ -31,7 +31,7 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(int invoiceID, String invoiceType, String idUsuario, Date dateIssue, double subTotal, double taxes, String customer, String paymentSell, String provider, String paymentBuy) {
+    public Invoice(String invoiceID, String invoiceType, String idUsuario, Date dateIssue, double subTotal, double taxes, String customer, String paymentSell, String provider, String paymentBuy) {
         this.invoiceID = invoiceID;
         this.invoiceType = invoiceType;
         this.idUsuario = idUsuario;
@@ -54,11 +54,11 @@ public class Invoice {
         this.id = id;
     }
 
-    public int getInvoiceID() {
+    public String getInvoiceID() {
         return invoiceID;
     }
 
-    public void setInvoiceID(int invoiceID) {
+    public void setInvoiceID(String invoiceID) {
         this.invoiceID = invoiceID;
     }
 

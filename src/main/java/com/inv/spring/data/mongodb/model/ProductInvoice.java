@@ -20,7 +20,7 @@ public class ProductInvoice {
     private String invoiceType;
 
     @JsonProperty("invoiceID")
-    private int invoiceID;
+    private String invoiceID;
 
     @JsonProperty("productId")
     private int productId;
@@ -74,7 +74,7 @@ public class ProductInvoice {
     public ProductInvoice() {
     }
 
-    public ProductInvoice(String idUsuario, String invoiceType, int invoiceID, int productId, String name,
+    public ProductInvoice(String idUsuario, String invoiceType, String invoiceID, int productId, String name,
             String description, double price, int amount, Date dateIssue, double utility) {
         this.idUsuario = idUsuario;
         this.invoiceType = invoiceType;
@@ -114,11 +114,11 @@ public class ProductInvoice {
         this.invoiceType = invoiceType;
     }
 
-    public int getInvoiceID() {
+    public String getInvoiceID() {
         return invoiceID;
     }
 
-    public void setInvoiceID(int invoiceID) {
+    public void setInvoiceID(String invoiceID) {
         this.invoiceID = invoiceID;
     }
 

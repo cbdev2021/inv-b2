@@ -92,8 +92,12 @@ public class InvoiceController {
     //     }
     // }
 
-    @DeleteMapping("/delete-invoice/{id}")
-    public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") int invoiceID) {
+    @DeleteMapping("/delete-invoice/{invoiceID}")
+    public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("invoiceID") String invoiceID) {
+    
+    // public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") int invoiceID,
+    // @RequestHeader("Authorization") String token) {
+    
         Map<String, String> response = new HashMap<>();
         try {
             Optional<Invoice> existingInvoice = invoiceRepository.findByInvoiceID(invoiceID);
