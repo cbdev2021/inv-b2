@@ -13,6 +13,8 @@ public interface InvoiceRepository extends CrudRepository<Invoice, String> {
     
     Optional<Invoice> findByInvoiceID(String invoiceID);
     void deleteByInvoiceID(String invoiceID);
+
+    Optional<Invoice> findById(String id);
     
 
 }

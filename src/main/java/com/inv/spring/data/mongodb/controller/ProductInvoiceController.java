@@ -43,12 +43,52 @@ public class ProductInvoiceController {
     // }
 
     // Tu código de controlador...
-    @PostMapping("/add-product-invoice")
-    public ResponseEntity<?> addProductInvoice(@RequestBody ProductInvoice productInvoice,
-            @RequestHeader("Authorization") String token) {
+    // @PostMapping("/add-product-invoice")
+    // public ResponseEntity<?> addProductInvoice(@RequestBody ProductInvoice
+    // productInvoice,
+    // @RequestHeader("Authorization") String token) {
 
+    // el problema es que se actualiza:
+    // @PostMapping("/add-product-invoice")
+    // public ResponseEntity<?> addProductInvoice(@RequestBody ProductInvoice
+    // productInvoice) {
+
+    // try {
+    // ProductInvoice newProductInvoice =
+    // productInvoiceRepository.save(productInvoice);
+    // return new ResponseEntity<>(newProductInvoice, HttpStatus.CREATED);
+    // } catch (DataIntegrityViolationException e) {
+    // return ResponseEntity.badRequest().body("Ya existe un producto con el mismo
+    // ID de factura.");
+    // } catch (Exception e) {
+    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error
+    // interno del servidor.");
+    // }
+    // }
+
+    @PostMapping("/add-product-invoice")
+    public ResponseEntity<?> addProductInvoice(@RequestBody ProductInvoice productInvoice) {
         try {
-            ProductInvoice newProductInvoice = productInvoiceRepository.save(productInvoice);
+            // Crear un nuevo objeto ProductInvoice en lugar de utilizar el recibido
+            // NEW!!!!!!
+            ProductInvoice newProductInvoice = new ProductInvoice();
+            newProductInvoice.setAmount(productInvoice.getAmount());
+            newProductInvoice.setDateIssue(productInvoice.getDateIssue());
+            newProductInvoice.setDescription(productInvoice.getDescription());
+            // Asignar un nuevo ID (si lo deseas)
+            // newProductInvoice.setId(null); // Opcional: si quieres que el ID sea generado
+            // por la base de datos
+            newProductInvoice.setIdUsuario(productInvoice.getIdUsuario());
+            newProductInvoice.setInvoiceID(productInvoice.getInvoiceID());
+            newProductInvoice.setInvoiceType(productInvoice.getInvoiceType());
+            newProductInvoice.setName(productInvoice.getName());
+            newProductInvoice.setPrice(productInvoice.getPrice());
+            newProductInvoice.setProductId(productInvoice.getProductId());
+            newProductInvoice.setUtility(productInvoice.getUtility());
+
+            // Guardar el nuevo objeto ProductInvoice
+            newProductInvoice = productInvoiceRepository.save(newProductInvoice);
+
             return new ResponseEntity<>(newProductInvoice, HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.badRequest().body("Ya existe un producto con el mismo ID de factura.");
@@ -98,7 +138,6 @@ public class ProductInvoiceController {
             if (productInvoiceData.isPresent()) {
                 ProductInvoice existingProductInvoice = productInvoiceData.get();
 
-                // SOLO HAY 5 AGREGAR LOS
                 existingProductInvoice.setInvoiceType(updatedProductInvoice.getInvoiceType());
                 existingProductInvoice.setDateIssue(updatedProductInvoice.getDateIssue());
                 existingProductInvoice.setPrice(updatedProductInvoice.getPrice());
@@ -123,24 +162,26 @@ public class ProductInvoiceController {
     }
 
     // @DeleteMapping("/delete-product-invoice/{id}")
-    // public ResponseEntity<Map<String, String>> deleteProductInvoice(@PathVariable("id") String id,
-    //         @RequestHeader("Authorization") String token) {
-    //     Map<String, String> response = new HashMap<>();
-    //     try {
-    //         Optional<ProductInvoice> existingProductInvoice = productInvoiceRepository.findById(id);
+    // public ResponseEntity<Map<String, String>>
+    // deleteProductInvoice(@PathVariable("id") String id,
+    // @RequestHeader("Authorization") String token) {
+    // Map<String, String> response = new HashMap<>();
+    // try {
+    // Optional<ProductInvoice> existingProductInvoice =
+    // productInvoiceRepository.findById(id);
 
-    //         if (existingProductInvoice.isPresent()) {
-    //             productInvoiceRepository.deleteById(id);
-    //             response.put("message", "ProductInvoice eliminado con éxito");
-    //             return new ResponseEntity<>(response, HttpStatus.OK);
-    //         } else {
-    //             response.put("message", "No se encontró el ProductInvoice con ID: " + id);
-    //             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    //         }
-    //     } catch (Exception e) {
-    //         response.put("message", "Error al eliminar el ProductInvoice");
-    //         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
+    // if (existingProductInvoice.isPresent()) {
+    // productInvoiceRepository.deleteById(id);
+    // response.put("message", "ProductInvoice eliminado con éxito");
+    // return new ResponseEntity<>(response, HttpStatus.OK);
+    // } else {
+    // response.put("message", "No se encontró el ProductInvoice con ID: " + id);
+    // return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    // }
+    // } catch (Exception e) {
+    // response.put("message", "Error al eliminar el ProductInvoice");
+    // return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
     // }
 
     @DeleteMapping("/delete-products-invoice-id/{invoiceID}")

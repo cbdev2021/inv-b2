@@ -92,22 +92,26 @@ public class InvoiceController {
     //     }
     // }
 
-    @DeleteMapping("/delete-invoice/{invoiceID}")
-    public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("invoiceID") String invoiceID) {
+    // @DeleteMapping("/delete-invoice/{invoiceID}")
+    // public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("invoiceID") String invoiceID) {
     
-    // public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") int invoiceID,
-    // @RequestHeader("Authorization") String token) {
+        
+    @DeleteMapping("/delete-invoice/{id}")
+    public ResponseEntity<Map<String, String>> deleteInvoice(@PathVariable("id") String id) {
     
         Map<String, String> response = new HashMap<>();
         try {
-            Optional<Invoice> existingInvoice = invoiceRepository.findByInvoiceID(invoiceID);
+            // Optional<Invoice> existingInvoice = invoiceRepository.findByInvoiceID(invoiceID);
+            Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
 
             if (existingInvoice.isPresent()) {
-                invoiceRepository.deleteByInvoiceID(invoiceID);
+                // invoiceRepository.deleteByInvoiceID(invoiceID);
+                invoiceRepository.deleteById(id);
+
                 response.put("message", "Invoice eliminado con éxito");
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
-                response.put("message", "No se encontró la factura con ID: " + invoiceID);
+                response.put("message", "No se encontró la factura con ID: " + id);
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
