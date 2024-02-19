@@ -115,6 +115,8 @@ public class ProductController {
                 existingProduct.setDescription(updatedProduct.getDescription());
                 existingProduct.setPrice(updatedProduct.getPrice());
                 // Agrega otras propiedades según sea necesario
+                existingProduct.setAmount(updatedProduct.getAmount() );
+                existingProduct.setUtility(updatedProduct.getUtility() );
 
                 Product savedProduct = productRepository.save(existingProduct);
 
