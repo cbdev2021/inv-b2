@@ -23,7 +23,8 @@ import java.security.MessageDigest;
 // import java.security.NoSuchAlgorithmException;
 
 // @CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://localhost:3000", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.OPTIONS })
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -34,7 +35,7 @@ public class UserController {
     // private static final String SECRET_KEY = "yourSecretKey";
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public ResponseEntity<Map<String, String>> addUser(@RequestBody User user) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -176,7 +177,14 @@ public class UserController {
                 User user = userData.get();
                 user.setName(updateUser.getName() != null ? updateUser.getName() : user.getName());
                 user.setEmail(updateUser.getEmail() != null ? updateUser.getEmail() : user.getEmail());
-                user.setPassword(updateUser.getPassword() != null ? updateUser.getPassword() : user.getPassword());
+                // user.setPassword(updateUser.getPassword() != null ? updateUser.getPassword()
+                // : user.getPassword());
+                
+                // Verificar si se está actualizando la contraseña
+                if (updateUser.getPassword() != null && !updateUser.getPassword().isEmpty()) {
+                    String encryptedPassword = encryptPassword(updateUser.getPassword());
+                    user.setPassword(encryptedPassword);
+                }
 
                 User updatedUser = userRepository.save(user);
 
