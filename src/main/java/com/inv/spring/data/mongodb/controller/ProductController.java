@@ -115,8 +115,8 @@ public class ProductController {
                 existingProduct.setDescription(updatedProduct.getDescription());
                 existingProduct.setPrice(updatedProduct.getPrice());
                 // Agrega otras propiedades según sea necesario
-                existingProduct.setAmount(updatedProduct.getAmount() );
-                existingProduct.setUtility(updatedProduct.getUtility() );
+                existingProduct.setAmount(updatedProduct.getAmount());
+                existingProduct.setUtility(updatedProduct.getUtility());
 
                 Product savedProduct = productRepository.save(existingProduct);
 
@@ -164,46 +164,48 @@ public class ProductController {
     // @RequestHeader("Authorization") String token) {
 
     @DeleteMapping("/delete-product/{id}")
-    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable("id")
-    String id) {
+    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable("id") String id) {
 
-    Map<String, String> response = new HashMap<>();
-    try {
-    Optional<Product> existingProduct = productRepository.findById(id);
+        Map<String, String> response = new HashMap<>();
+        try {
+            Optional<Product> existingProduct = productRepository.findById(id);
 
-    if (existingProduct.isPresent()) {
-    productRepository.deleteById(id);
-    response.put("message", "Product eliminado con éxito");
-    return new ResponseEntity<>(response, HttpStatus.OK);
-    } else {
-    response.put("message", "No se encontró el producto con ID: " + id);
-    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-    } catch (Exception e) {
-    response.put("message", "Error al eliminar el producto");
-    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+            if (existingProduct.isPresent()) {
+                productRepository.deleteById(id);
+                response.put("message", "Product eliminado con éxito");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.put("message", "No se encontró el producto con ID: " + id);
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            response.put("message", "Error al eliminar el producto");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // @DeleteMapping("/delete-product")
-    // public ResponseEntity<Map<String, String>> deleteProductByProductId(@RequestParam("productId") String productId) {
+    // public ResponseEntity<Map<String, String>>
+    // deleteProductByProductId(@RequestParam("productId") String productId) {
 
-    //     Map<String, String> response = new HashMap<>();
-    //     try {
-    //         Optional<Product> existingProduct = productRepository.findByProductId(productId);
+    // Map<String, String> response = new HashMap<>();
+    // try {
+    // Optional<Product> existingProduct =
+    // productRepository.findByProductId(productId);
 
-    //         if (existingProduct.isPresent()) {
-    //             productRepository.deleteByProductId(productId);
-    //             response.put("message", "Producto eliminado con éxito");
-    //             return new ResponseEntity<>(response, HttpStatus.OK);
-    //         } else {
-    //             response.put("message", "No se encontró el producto con productId: " + productId);
-    //             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    //         }
-    //     } catch (Exception e) {
-    //         response.put("message", "Error al eliminar el producto");
-    //         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
+    // if (existingProduct.isPresent()) {
+    // productRepository.deleteByProductId(productId);
+    // response.put("message", "Producto eliminado con éxito");
+    // return new ResponseEntity<>(response, HttpStatus.OK);
+    // } else {
+    // response.put("message", "No se encontró el producto con productId: " +
+    // productId);
+    // return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    // }
+    // } catch (Exception e) {
+    // response.put("message", "Error al eliminar el producto");
+    // return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
     // }
 
     @GetMapping("/get-product/{id}")
@@ -232,21 +234,83 @@ public class ProductController {
         }
     }
 
+    // @PutMapping("/update-product-amount/{productId}")
+    // public ResponseEntity<Product> updateProductAmount(@PathVariable("productId")
+    // String productId,
+    // @RequestBody Product product,
+    // @RequestHeader("Authorization") String token) {
+    // try {
+    // if (productRepository.existsById(productId)) {
+    // Product existingProduct = productRepository.findById(productId).get();
+    // existingProduct.setAmount(product.getAmount());
+    // Product updatedProduct = productRepository.save(existingProduct);
+    // return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    // } else {
+    // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // }
+    // } catch (Exception e) {
+    // return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
+
     @PutMapping("/update-product-amount/{productId}")
-    public ResponseEntity<Product> updateProductAmount(@PathVariable("productId") String productId,
-            @RequestBody Product product,
-            @RequestHeader("Authorization") String token) {
-        try {
-            if (productRepository.existsById(productId)) {
-                Product existingProduct = productRepository.findById(productId).get();
-                existingProduct.setAmount(product.getAmount());
-                Product updatedProduct = productRepository.save(existingProduct);
-                return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Product> updateProduct(@PathVariable("productId") int
+    productId, @RequestBody Product updatedProduct) {
+    try {
+    Optional<Product> productData = productRepository.findByProductId(productId);
+
+    if (productData.isPresent()) {
+    Product existingProduct = productData.get();
+    existingProduct.setName(updatedProduct.getName());
+    existingProduct.setDescription(updatedProduct.getDescription());
+    existingProduct.setPrice(updatedProduct.getPrice());
+    // Agrega otras propiedades según sea necesario
+    existingProduct.setAmount(updatedProduct.getAmount() );
+    existingProduct.setUtility(updatedProduct.getUtility() );
+
+    Product savedProduct = productRepository.save(existingProduct);
+
+    System.out.println("mensaje");
+
+    System.out.println(savedProduct);
+
+    return new ResponseEntity<>(savedProduct, HttpStatus.OK);
+    } else {
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    } catch (Exception e) {
+    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+
+    // @PatchMapping("/update-product-amount/{productId}")
+    // public ResponseEntity<Product> updateProductAmount(@PathVariable("productId") int productId,
+    //         @RequestBody Map<String, Integer> amountData) {
+    //     try {
+    //         // Buscar el producto por ID
+    //         Optional<Product> productData = productRepository.findByProductId(productId);
+
+    //         if (productData.isPresent()) {
+    //             Product existingProduct = productData.get();
+
+    //             // Obtener el valor de "amount" de la solicitud
+    //             Integer newAmount = amountData.get("amount");
+
+    //             // Si "amount" está presente, actualizamos el campo
+    //             if (newAmount != null) {
+    //                 existingProduct.setAmount(newAmount);
+    //             }
+
+    //             // Guardar el producto con el nuevo "amount"
+    //             Product savedProduct = productRepository.save(existingProduct);
+
+    //             return new ResponseEntity<>(savedProduct, HttpStatus.OK);
+    //         } else {
+    //             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //         }
+    //     } catch (Exception e) {
+    //         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+
 }

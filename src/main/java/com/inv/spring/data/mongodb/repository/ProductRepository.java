@@ -13,4 +13,6 @@ public interface ProductRepository extends CrudRepository<Product, String> {
     Optional<Product> findById(String id);
     void deleteByProductId(String id);
 
+    Optional<Product> findByProductId(int productId);
+
 }
